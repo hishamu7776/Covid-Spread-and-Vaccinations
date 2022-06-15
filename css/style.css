@@ -1,5 +1,5 @@
 body {
-    background-color: #F1F3F3    
+    background-color: #FFFFFF;    
 }
 svg{
     background-color: #FFFFFF;
@@ -12,6 +12,11 @@ svg{
 #select-data{
     margin: 10px;
     position: absolute;
+    font-size: .6em;
+    width: 150px;
+}
+#select-continent{
+    margin: 10px;
     font-size: .6em;
     width: 150px;
 }
@@ -44,4 +49,19 @@ svg{
     transition: .3s;
     stroke: "#333";
     stroke-width: 1.5;
+}
+.plot-cols{
+    display: flex;
+    flex-direction: column;
+}
+.control-group{
+    padding: 0 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+.minmax-group{
+    display: flex;
+    flex-direction: row;
 }
