@@ -14,7 +14,7 @@ class MapChart {
         const vis = this
         vis.MARGIN = { TOP: 0, RIGHT: 0, BOTTOM: 0, LEFT: 0 };
         vis.WIDTH = 850 - vis.MARGIN.LEFT - vis.MARGIN.RIGHT
-        vis.HEIGHT = 450 - vis.MARGIN.TOP - vis.MARGIN.BOTTOM
+        vis.HEIGHT = 500 - vis.MARGIN.TOP - vis.MARGIN.BOTTOM
         vis.headings = { 
             case_per_date: 'Total Cases', 
             case_per_million: 'Total Case (per million)',

@@ -46,20 +46,11 @@
                         <option value="South America">South America</option>
                         <option value="Oceania">Oceania</option>
                     </select>
-                    <div class="minmax-group">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="sortCountryByValue" id="sort-descending"
-                                value="sortMax" checked>
-                            <label class="form-check-label" for="inlineRadio1">Most cases</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="sortCountryByValue" id="sort-ascending"
-                                value="sortMin">
-                            <label class="form-check-label" for="inlineRadio2">Least cases</label>
-                        </div>
-                    </div>
+                    <button type="button" id="sortByValue" value="sortMax" class="btn btn-primary">Show lowest to highest</button>
                 </div>
-                <div id="case_line_chart" class="case_line_chart"></div>
+                <div id="case_line_chart" class="case_line_chart">
+                    <div id='line-tooltip' class="tooltip"></div>
+                </div>
                 <div id="case_scatter_plot" class="case_scatter_plot"></div>
             </div>
         </div>

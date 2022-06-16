@@ -20,6 +20,7 @@ svg{
     font-size: .6em;
     width: 150px;
 }
+
 .tooltip{
     position: absolute;
     display: flex;

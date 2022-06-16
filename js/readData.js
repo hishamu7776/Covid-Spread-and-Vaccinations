@@ -4,7 +4,7 @@ const OTHERS = ["European Union","High income","International","Low income","Low
 const parseTime = d3.timeParse("%d-%m-%Y")
 const xParseTime = d3.timeParse("%b-%Y")
 const formatTime = d3.timeFormat("%b-%Y")
-const xFormatTime = d3.timeFormat("%Y-%b")
+const xFormatTime = d3.timeFormat("%b-%Y")
 
 //create formatted tick values
 const siFormat = d3.format("~s");

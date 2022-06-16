@@ -14,10 +14,10 @@ class LineChart {
 
     initVis() {
         const vis = this
-        vis.MARGIN = { LEFT: 80, RIGHT: 120, TOP: 10, BOTTOM: 60 }
+        vis.MARGIN = { LEFT: 80, RIGHT: 10, TOP: 10, BOTTOM: 60 }
         vis.WIDTH = 600 - vis.MARGIN.LEFT - vis.MARGIN.RIGHT
-        vis.HEIGHT = 400 - vis.MARGIN.TOP - vis.MARGIN.BOTTOM
-
+        vis.HEIGHT = 350 - vis.MARGIN.TOP - vis.MARGIN.BOTTOM
+        vis.lineStroke = "2px"
         vis.headings = {
             total_cases: 'Total Cases',
             total_cases_million: 'Total Case (per million)',
@@ -96,6 +96,12 @@ class LineChart {
         vis.line = d3.line()
             .x(function (d) { return vis.x(xParseTime(d.date)); })
             .y(function (d) { return vis.y(d[vis.yColumn]); });
+        //For tooltip
+        vis.tooltip = d3.select("#line-tooltip")
+        vis.tooltipLocator = vis.g.append('line');
+
+
+
         //for transition
         vis.t = d3.transition().duration(500)
         vis.addLegend()
@@ -105,7 +111,7 @@ class LineChart {
         const vis = this
         //Column_names
         vis.yColumn = vis.variables[$("#select-data").val()]
-
+        vis.operation = $("#sortByValue").val()
         vis.covidData = d3.nest()
             .key(d => d.location)
             .rollup(function (values) {
@@ -130,30 +136,18 @@ class LineChart {
                 return dateCountryData
             })
             .entries(lineValueData)
-
-        vis.maxValueByCountry = []
-        d3.map(vis.covidData, function (data) {
-            const max_val = d3.max(data.value, d => d[vis.yColumn])
-            vis.maxValueByCountry.push([data.key, max_val])
-        })
-        vis.operation = $('input[name=sortCountryByValue]:checked').val()
+        
         if (vis.operation == "sortMax") {
-            vis.maxValueByCountry.sort(function (a, b) {
-                return b[1] - a[1];
-            });
-        } else {
-            vis.maxValueByCountry.sort(function (a, b) {
-                return a[1] - b[1];
-            });
+            vis.covidData = vis.covidData.sort(function(a,b){
+                return d3.descending(d3.max(a.value,d => d[vis.yColumn]),d3.max(b.value,d => d[vis.yColumn]))
+            })
+        }else{
+            vis.covidData = vis.covidData.sort(function(a,b){
+                return d3.ascending(d3.min(a.value,d => d[vis.yColumn]),d3.min(b.value,d => d[vis.yColumn]))
+            })
         }
 
-        vis.countryList = []
-        for (var i = 0; i < 5; i++) {
-            vis.countryList.push(vis.maxValueByCountry[i][0])
-        }
-        vis.covidData = vis.covidData.filter(function (d) {
-            return vis.countryList.includes(d.key)
-        })
+        vis.covidData = vis.covidData.slice(0,5)
 
         vis.updateVis()
     }
@@ -171,10 +165,10 @@ class LineChart {
             d3.max(vis.covidData, d => d3.max(d.value, c => c[vis.yColumn]))
         ]).nice();
 
-        vis.colorScale.domain(vis.countryList).range(d3.schemeCategory10);
+        vis.colorScale.domain(vis.covidData,d => d.key).range(d3.schemeCategory10);
         vis.colorMap = {}
-        vis.countryList.forEach(function(d){
-            vis.colorMap[d] = vis.colorScale(d);
+        vis.covidData.forEach(function(d){
+            vis.colorMap[d.key] = vis.colorScale(d.key);
         })
         // update axes
         vis.xAxisCall.scale(vis.x)
@@ -206,47 +200,100 @@ class LineChart {
             .attr("d", d => vis.line(d.value))
 
         d3.selectAll(".line_legend_entry").remove();
-        const ls_h = 25
-        const ls_w = 25
-        var y_pos = 50
-        var y_text_pos = 65
+        const ls_h = 20
+        const ls_w = 20
+        vis.y_pos = 0
+        vis.x_pos = 90
+        vis.x_text_pos = 115
+        vis.y_text_pos = 15
+
         
         vis.legend_entry = vis.legend.selectAll("#line_legend")
-            .data(vis.countryList)
+            .data(vis.covidData)
             .enter().append("g")
             .attr("class", "line_legend_entry");
+        
+        /*
 
         vis.rect = vis.legend_entry.append("rect")
-            .attr("x", vis.WIDTH+70)
-            .attr("y", function(d){
-                y_pos = y_pos+30
-                return y_pos
+            .attr("x", function(d,i){
+                if(i%2 == 0){
+                     vis.x_pos = 90
+                     return vis.x_pos
+                }
+                vis.x_pos = vis.x_pos+300
+                return vis.x_pos
+            })
+            .attr("y", function(d,i){
+                if(i%2 == 0){
+                    vis.y_pos = vis.y_pos+30
+                }
+                return vis.y_pos
             })
             .attr("id", function (d) {
-                return d
+                return d.key
             })
             .attr("width", ls_w)
             .attr("height", ls_h)
             .attr("opacity", .8)
             .attr("cursor", "pointer")
             .style("fill", function (d) {
-                return vis.colorMap[d];
+                return vis.colorMap[d.key];
             })
             .style("transition",".5s")
-            .append('text')
-            .text(function (d) {
-                return d
-            })
+        
         vis.text = vis.legend_entry.append("text")
-            .attr("x", vis.WIDTH+105)
-            .attr("y", function(d){
-                y_text_pos = y_text_pos+30
-                return y_text_pos
+            .attr("font-size", "1em")
+            .style("fill", function (d) {
+                return vis.colorMap[d.key];
             })
-            .attr("font-size", ".9em")
-            .text(function (d) {
-                return d
-            })          
+            .text(function (d) {                
+                return d.key
+            }).call(wrap, 300);
+        */
+        vis.tip = vis.g.append('rect')
+            .attr('height', vis.HEIGHT)    
+            .attr('width', vis.WIDTH)
+            .attr('opacity', 0)
+            .on('mousemove', function(d){
+                const mouse_location = d3.mouse(vis.tip.node())
+                const tooltipDate =  vis.x.invert(mouse_location[0])
+                const strDate = xFormatTime(tooltipDate)
+
+                vis.tooltipLocator.attr('stroke','#000')
+                    .style("opacity",1)
+                    .attr('x1', vis.x(tooltipDate))
+                    .attr('x2', vis.x(tooltipDate))
+                    .attr('y1', 0)
+                    .attr('y2', vis.HEIGHT);
+
+                vis.tooltip.html(strDate)
+                    .style('display','block')
+                    .style("opacity",.9)
+                    .style("width","200px")
+                    .style('left', d3.mouse(this)[0] + 780+"px")
+                    .style('top', d3.mouse(this)[1]+ 10 +"px")
+                    .attr('left', 200)
+                    .attr('top', 50)
+                    .selectAll()
+                    .data(vis.covidData).enter()
+                    .append('div')
+                    .style('color', d => vis.colorMap[d.key])
+                    .html(function(data){    
+                        var axis_value = 0;
+                        if(data.value.find(d => d.date == strDate)!=undefined){
+                            axis_value=data.value.find(d => d.date == strDate)[vis.yColumn];
+                        }
+                        return data.key + ' : ' + axis_value;
+                    });
+
+            })
+            .on('mouseout', function(d){
+                vis.tooltip.style("opacity",0)
+                vis.tooltipLocator.style("opacity",0)
+            });
+
+        
     }
     addLegend() {
         const vis = this
