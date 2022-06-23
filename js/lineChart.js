@@ -15,15 +15,17 @@ class LineChart {
     initVis() {
         const vis = this
         vis.MARGIN = { LEFT: 80, RIGHT: 10, TOP: 10, BOTTOM: 60 }
-        vis.WIDTH = 600 - vis.MARGIN.LEFT - vis.MARGIN.RIGHT
-        vis.HEIGHT = 350 - vis.MARGIN.TOP - vis.MARGIN.BOTTOM
+        vis.WIDTH = 500 - vis.MARGIN.LEFT - vis.MARGIN.RIGHT
+        vis.HEIGHT = 300 - vis.MARGIN.TOP - vis.MARGIN.BOTTOM
         vis.lineStroke = "2px"
+
         vis.headings = {
             total_cases: 'Total Cases',
             total_cases_million: 'Total Case (per million)',
             total_deaths: 'Total Deaths',
             total_death_million: 'Total Death (per million)'
         }
+        
         vis.ranges = {
             total_cases: [3000, 30000, 300000, 3000000, 10000000, 50000000, 100000000],
             total_cases_million: [1000, 5000, 10000, 50000, 100000, 200000, 300000],

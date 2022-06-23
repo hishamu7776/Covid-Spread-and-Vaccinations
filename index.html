@@ -34,7 +34,11 @@
                 <option value="death_million">Total Deaths (per million)</option>
                 <option value="death">Total Deaths</option>
             </select>
-            <div id="case_map" class="case_map"></div>
+            <div class="plot-cols">
+                <div id="case_map" class="case_map"></div>
+                <div id="timeline"></div>
+            </div>
+
             <div class="plot-cols">
                 <div class="control-group">
                     <select id="select-continent" class="form-control">
@@ -51,7 +55,9 @@
                 <div id="case_line_chart" class="case_line_chart">
                     <div id='line-tooltip' class="tooltip"></div>
                 </div>
-                <div id="case_scatter_plot" class="case_scatter_plot"></div>
+                <div id="case_scatter_plot" class="case_scatter_plot">
+                    
+                </div>
             </div>
         </div>
     </div>
@@ -76,6 +82,8 @@
     <script src="js/readData.js"></script>
     <script src="js/mapChart.js"></script>
     <script src="js/lineChart.js"></script>
+    <script src="js/scatterPlot.js"></script>
+    <script src="js/timeline.js"></script>
     <script src="js/main.js"></script>
 </body>
 

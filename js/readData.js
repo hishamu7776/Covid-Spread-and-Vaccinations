@@ -1,6 +1,5 @@
-const CONTINENTS = ["Africa","Asia","Europe","North America","South America","Oceania"]
+let CONTINENTS = ["Africa","Asia","Europe","North America","South America","Oceania"]
 const OTHERS = ["European Union","High income","International","Low income","Lower middle income","World","Upper middle income","Western Sahara"]
-
 const parseTime = d3.timeParse("%d-%m-%Y")
 const xParseTime = d3.timeParse("%b-%Y")
 const formatTime = d3.timeFormat("%b-%Y")
@@ -18,6 +17,10 @@ let caseValueData;
 let caseMap;
 let caseLineChart;
 let lineValueData;
+let scatterValueData;
+let scatterPlot;
+let timeline;
+let timelineValueData;
 let covidData;
 let countryFilterOn = false;
 let caseMapRect;
@@ -36,14 +39,17 @@ Promise.all([
 
         }  
         d.date = formatTime(parseTime(d.date));
-        d['total_cases'] = +parseInt(d['total_cases'])
-        d['case_per_date'] = +parseInt(d['case_per_date'])
-        d['total_deaths'] = +parseInt(d['total_deaths'])
-        d['death_per_date'] = +parseInt(d['death_per_date'])
-        d['total_cases_million'] = +parseInt(d['total_cases_million'])
-        d['case_per_million'] = +parseInt(d['case_per_million'])
-        d['death_per_million'] = +parseInt(d['death_per_million'])
-        d['total_death_million'] = +parseInt(d['total_death_million'])
+        d['total_cases'] = +d['total_cases']
+        d['case_per_date'] = +d['case_per_date']
+        d['total_deaths'] = +d['total_deaths']
+        d['death_per_date'] = +d['death_per_date']
+        d['total_cases_million'] = +d['total_cases_million']
+        d['case_per_million'] = +d['case_per_million']
+        d['death_per_million'] = +d['death_per_million']
+        d['total_death_million'] = +d['total_death_million']
+        d['total_tests'] = +d['total_tests']
+        d['tests_per_date'] = +d['tests_per_date']
+        d['tests_per_thousand'] = +d['tests_per_thousand']
         return d;
     })
 ]).then(
@@ -58,8 +64,11 @@ function run(error, map_data, covid_data){
     
     lineValueData = covidData
     caseValueData = covidData
+    scatterValueData = covidData
+    timelineValueData = covidData
 
     caseMap = new MapChart("#case_map")
     caseLineChart = new LineChart("#case_line_chart")
-    
+    scatterPlot = new ScatterPlot("#case_scatter_plot")
+    timeline = new Timeline("#timeline")
 }

@@ -1,6 +1,7 @@
 $("#select-data").on("change", () => {
     caseMap.wrangleData()
     caseLineChart.wrangleData()
+    timeline.wrangleData()
 })
 $("#select-continent").on("change", () => {
     const continent = $("#select-continent").val()
@@ -10,12 +11,15 @@ $("#select-continent").on("change", () => {
             return d.continent == continent
         })
         caseValueData = lineValueData
+        timelineValueData = lineValueData
     }else{
         lineValueData = covidData
         caseValueData = covidData
+        timelineValueData = covidData
     }
     caseMap.wrangleData()
     caseLineChart.wrangleData()
+    timeline.wrangleData()
 })
 $("#sortByValue").button().click(function(){
     if($("#sortByValue").val()=="sortMax"){
@@ -36,9 +40,11 @@ function filterByCountry(country_list) {
         return !country_list.includes(d.iso_code) && !country_list.includes(d.iso_code)
     });
     lineValueData = caseValueData
+    timelineValueData = caseValueData
     //Update Chart
     caseMap.wrangleData()
     caseLineChart.wrangleData()
+    timeline.wrangleData()
 }
 
 function filterByDate() {
@@ -51,11 +57,13 @@ function clearCountryFilters() {
         caseMapRect = NaN
         caseValueData = covidData
         lineValueData = covidData
+        timelineValueData = covidData
         countryFilterOn = false
 
         //Update Chart
         caseMap.wrangleData()
         caseLineChart.wrangleData()
+        timeline.wrangleData()
     }
 }
 
@@ -90,4 +98,27 @@ function wrap(text, width) {
             }
         }
     });
+}
+
+function brushed() {
+	const selection = d3.event.selection || timeline.x.range()
+	const newValues = selection.map(timeline.x.invert)
+	changeDates(newValues)
+}
+
+function changeDates(values) {
+
+	newCovidData = covidData.filter(d => ((xParseTime(d.date) > values[0]) && (xParseTime(d.date) < values[1])))
+
+	$("#dateLabel1").text(formatTime(values[0]))
+	$("#dateLabel2").text(formatTime(values[1]))
+
+    lineValueData = newCovidData
+    caseValueData = newCovidData
+    scatterValueData = newCovidData
+
+    caseMap.wrangleData()
+    caseLineChart.wrangleData()
+    scatterPlot.wrangleData()
+    
 }
