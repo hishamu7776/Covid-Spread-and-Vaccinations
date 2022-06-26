@@ -5,8 +5,23 @@ $("#select-data").on("change", () => {
 })
 $("#select-vaccine-data").on("change", () => {
     packLayout.wrangleData()
+    stackedBarChart.wrangleData()
+    firstBarChart.wrangleData()
+    secondBarChart.wrangleData()
+    boosterBarChart.wrangleData()
 })
-
+$("#top-selector").on("change", () => {
+    stackedBarChart.wrangleData()
+    firstBarChart.wrangleData()
+    secondBarChart.wrangleData()
+    boosterBarChart.wrangleData()
+})
+$("#sort-vaccine").on("change", () => {
+    stackedBarChart.wrangleData()
+    firstBarChart.wrangleData()
+    secondBarChart.wrangleData()
+    boosterBarChart.wrangleData()
+})
 $("#select-continent").on("change", () => {
     const continent = $("#select-continent").val()
     countryFilterOn = true

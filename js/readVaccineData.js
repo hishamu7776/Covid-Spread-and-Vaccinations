@@ -10,9 +10,13 @@ const customTickFormat = function (d){
 
 let vaccineData;
 let barData;
+
 let packData;
 let packLayout;
 let stackedBarChart;
+let firstBarChart;
+let secondBarChart;
+let boosterBarChart;
 let vaccineFilterOn = false;
 let all_countries = [];
 
@@ -28,6 +32,8 @@ Promise.all([
         d['total_vaccinations_per_million'] = +d['total_vaccinations_per_million']
         d['partially_vaccinated_per_million'] = +d['partially_vaccinated_per_million']
         d['fully_vaccinated_per_million'] = +d['fully_vaccinated_per_million']
+        d['first_dose_per_million'] = +d['first_dose_per_million']
+        d['last_dose_per_million'] = +d['last_dose_per_million']
         d['booster_per_million'] = +d['booster_per_million']
         return d
     })
@@ -43,5 +49,8 @@ function run(error, vaccine_data){
     barData = vaccineData
     packLayout = new PackLayout("#pack_layout")
     stackedBarChart = new StackedBarChart("#stacked_bar")
+    firstBarChart = new BarChart("#first_bar",'first_dose','First Dose Taken')
+    secondBarChart = new BarChart("#second_bar",'last_dose','Last Dose Taken')
+    boosterBarChart = new BarChart("#booster_bar",'booster_dose','Booster Dose Taken')
 }
 

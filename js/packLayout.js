@@ -14,7 +14,7 @@ class PackLayout {
             'total_vaccinations': 'Total Vaccinations'
         }
         //Setting Layout
-        vis.MARGIN = { LEFT: 0, RIGHT: 0, TOP: 0, BOTTOM: 0 }
+        vis.MARGIN = { LEFT: 10, RIGHT: 10, TOP: 10, BOTTOM: 10 }
         vis.WIDTH = 500 - vis.MARGIN.LEFT - vis.MARGIN.RIGHT
         vis.HEIGHT = 500 - vis.MARGIN.TOP - vis.MARGIN.BOTTOM
         vis.x = d3.scaleTime().range([0, vis.WIDTH])
@@ -33,7 +33,8 @@ class PackLayout {
             .attr("width", vis.WIDTH + vis.MARGIN.LEFT + vis.MARGIN.RIGHT)
             .attr("height", vis.HEIGHT + vis.MARGIN.TOP + vis.MARGIN.BOTTOM)
             .append("g")
-            .attr("transform", `translate(${vis.MARGIN.LEFT}, ${vis.MARGIN.TOP})`)            
+            .attr("transform", `translate(${vis.MARGIN.LEFT}, ${vis.MARGIN.TOP})`)
+            
 
         //Color Scale
         vis.color = d3.scaleSequential(d3.interpolateBuGn)
