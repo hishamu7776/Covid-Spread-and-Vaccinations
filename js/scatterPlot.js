@@ -60,7 +60,7 @@ class ScatterPlot {
         vis.x = d3.scaleLog().range([0, vis.WIDTH]).domain([.1, 40000])
         vis.y = d3.scaleLinear().range([vis.HEIGHT, 0])
         vis.area = d3.scaleLinear().range([10 * Math.PI, 100 * Math.PI])
-        vis.colorScale = d3.scaleOrdinal().domain(CONTINENTS).range(d3.schemeCategory10);;
+        vis.colorScale = d3.scaleOrdinal().domain(CONTINENTS).range(d3.schemeCategory10);
 
         //For Axis
         vis.xAxisCall = d3.axisBottom()

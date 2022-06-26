@@ -3,6 +3,10 @@ $("#select-data").on("change", () => {
     caseLineChart.wrangleData()
     timeline.wrangleData()
 })
+$("#select-vaccine-data").on("change", () => {
+    packLayout.wrangleData()
+})
+
 $("#select-continent").on("change", () => {
     const continent = $("#select-continent").val()
     countryFilterOn = true

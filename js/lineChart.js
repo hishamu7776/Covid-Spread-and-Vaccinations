@@ -175,7 +175,9 @@ class LineChart {
         // update axes
         vis.xAxisCall.scale(vis.x)
 
-        vis.xAxis.transition(vis.t).call(vis.xAxisCall)
+        
+        vis.xAxis.transition(vis.t)
+            .call(vis.xAxisCall)
             .selectAll("text")
             .style("text-anchor", "end")
             .attr("dx", "-1em")
