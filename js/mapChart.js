@@ -12,29 +12,37 @@ class MapChart {
     }
     initVis() {
         const vis = this
-        vis.MARGIN = { TOP: 0, RIGHT: 0, BOTTOM: 0, LEFT: 0 };
-        vis.WIDTH = 850 - vis.MARGIN.LEFT - vis.MARGIN.RIGHT
-        vis.HEIGHT = 400 - vis.MARGIN.TOP - vis.MARGIN.BOTTOM
-        vis.headings = { 
-            case_per_date: 'Total Cases', 
+        vis.MARGIN = { TOP: 0, RIGHT: 200, BOTTOM: 0, LEFT: 0 };
+        vis.WIDTH = 1100 - vis.MARGIN.LEFT - vis.MARGIN.RIGHT
+        vis.HEIGHT = 450 - vis.MARGIN.TOP - vis.MARGIN.BOTTOM
+        vis.headings = {
+            case_per_date: 'Total Cases',
             case_per_million: 'Total Case (per million)',
-            death_per_date: 'Total Deaths', 
+            death_per_date: 'Total Deaths',
             death_per_million: 'Total Case (per million)'
         }
-        vis.ranges = { 
-            case_per_date: [3000, 30000, 300000, 3000000, 10000000, 50000000, 100000000], 
+
+        vis.titles = {
+            case: 'Total covid cases reported',
+            case_million: 'Covid cases per million people',
+            death: 'Total deaths reported due to covid',
+            death_million: 'Deaths reported per million people'
+        }
+
+
+        vis.ranges = {
+            case_per_date: [3000, 30000, 300000, 3000000, 10000000, 50000000, 100000000],
             case_per_million: [1000, 5000, 10000, 50000, 100000, 200000, 300000],
             death_per_date: [1000, 5000, 10000, 50000, 100000, 500000, 1100000],
             death_per_million: [10, 50, 100, 500, 1000, 5000, 10000]
         }
 
         vis.variables = {
-            case: 'case_per_date', 
+            case: 'case_per_date',
             case_million: 'case_per_million',
             death: 'death_per_date',
             death_million: 'death_per_million'
         }
-
         //Create SVG
         vis.svg = d3.select(vis.parentElement)
             .append('svg')
@@ -47,9 +55,10 @@ class MapChart {
             .attr("class", "map_background")
             .attr("width", vis.WIDTH)
             .attr("height", vis.HEIGHT)
-            .attr("fill", "#fff")
+            .attr("fill", "#eee")
             .on("click", function (d) {
                 clearCountryFilters(d)
+                vis.clicked()
             })
 
 
@@ -69,16 +78,22 @@ class MapChart {
                     .translate([vis.WIDTH / 2, vis.HEIGHT / 2])
                     .scale(130)
             )
-
+        vis.t = d3.transition().duration(500)
         // Legend
-        vis.legend = vis.svg.append("g")
+        vis.legend = d3.select(".map_legend_container")
+            .append('svg')
+            .attr('width', 200)
+            .attr('height', 300)
+            .append("g")
             .attr("id", "maplegend");
 
         vis.legend_heading = vis.legend
             .append("text")
             .attr("class", "legend_heading")
-            .attr("x", 20)
-            .attr("y", 230)
+            .attr("x", 10)
+            .attr("y", 20)
+            .attr("fill", "#666")
+
 
         vis.legend_x = d3.scaleLinear()
             .domain([2.6, 75.1])
@@ -104,8 +119,6 @@ class MapChart {
                 max_val = vis.mapValueData[d.iso_code]
             }
         })
-
-
         vis.updateVis()
     }
 
@@ -117,12 +130,11 @@ class MapChart {
         //Add g to svg
         vis.g = vis.svg.append('g')
             .attr('class', 'map_svg');
-            
+
         vis.g.selectAll("path").remove()
-        vis.mapEvents = vis.g.selectAll("path")
+        vis.map_selected = vis.g.selectAll("path")
             .data(vis.geoMap.features)
-            .enter()
-            .append("path")
+            .enter().append("path")
             .attr("d", vis.projection)
             .attr("class", "country")
             .attr("data-name", function (d) {
@@ -140,7 +152,7 @@ class MapChart {
             .attr("id", function (d) {
                 return d.id
             })
-        vis.mapEvents
+        vis.map_events = vis.map_selected
             .on("mouseover", function (d) {
                 d3.selectAll(".country")
                     .transition()
@@ -173,6 +185,7 @@ class MapChart {
                     .style("opacity", 0);
             })
             .on("click", function (d) {
+                vis.clicked(d)
                 clearCountryFilters()
                 vis.filter_country_list = []
                 for (const key in vis.mapValueData) {
@@ -190,33 +203,21 @@ class MapChart {
 
         const ls_w = 25;
         const ls_h = 25;
-
-        d3.selectAll(".legend_entry").remove();
-        vis.legend_entry = vis.legend.selectAll("#maplegend")
+        //Rectangular
+        vis.legend_box = vis.legend.selectAll("rect")
             .data(vis.colorScale.range().map(function (d) {
                 d = vis.colorScale.invertExtent(d);
                 if (d[0] == null) d[0] = vis.legend_x.domain()[0];
                 if (d[1] == null) d[1] = vis.legend_x.domain()[1];
                 return d;
             }))
-            .enter().append("g")
-            .attr("class", "legend_entry");
 
-        vis.rect = vis.legend_entry.append("rect")
-            .attr("x", 20)
-            .attr("y", function (d, i) {
-                return vis.HEIGHT - (i * ls_h) - 2 * ls_h;
-            })
-            .attr("id", function (d) {
-                return d[1].toString()
-            })
+        vis.legend_box.exit().remove()
+            .attr("y", function (d, i) { return 200 - (i * ls_h); })
             .attr("width", ls_w)
             .attr("height", ls_h)
-            .attr("opacity", .8)
             .attr("cursor", "pointer")
-            .style("fill", function (d) {
-                return vis.colorScale(d[0]);
-            })
+            .style("fill", function (d) { return vis.colorScale(d[0]); })
             .style("opacity", function (d) {
                 if (caseMapRect == d[1].toString()) {
                     return 1;
@@ -237,8 +238,7 @@ class MapChart {
                 } else {
                     return .5;
                 }
-            })
-            .on('click', function (d) {
+            }).on('click', function (d) {
                 clearCountryFilters()
                 vis.filter_country_list = []
                 caseMapRect = d[1].toString()
@@ -247,27 +247,93 @@ class MapChart {
                         vis.filter_country_list.push(key)
                     }
                 }
-                
+
+                filterByCountry(vis.filter_country_list)
+            });
+
+        vis.legend_box.enter().append("rect")
+            .merge(vis.legend_box)
+            .attr("x", 10)
+            .attr("y", function (d, i) { return 200 - (i * ls_h); })
+            .attr("width", ls_w)
+            .attr("height", ls_h)
+            .attr("cursor", "pointer")
+            .style("fill", function (d) { return vis.colorScale(d[0]); })
+            .style("opacity", function (d) {
+                if (caseMapRect == d[1].toString()) {
+                    return 1;
+                } else {
+                    return .6;
+                }
+            })
+            .style("stroke", function (d) {
+                if (caseMapRect == d[1].toString()) {
+                    return "#000";
+                } else {
+                    return "#FFF";
+                }
+            })
+            .style("stroke-width", function (d) {
+                if (caseMapRect == d[1].toString()) {
+                    return 1;
+                } else {
+                    return .5;
+                }
+            }).on('click', function (d) {
+                clearCountryFilters()
+                vis.filter_country_list = []
+                caseMapRect = d[1].toString()
+                for (const key in vis.mapValueData) {
+                    if (!(vis.mapValueData[key] >= d[0] && vis.mapValueData[key] <= d[1])) {
+                        vis.filter_country_list.push(key)
+                    }
+                }
+
                 filterByCountry(vis.filter_country_list)
             });
 
 
-        vis.text = vis.legend_entry.append("text")
-            .attr("x", 50)
+        //text
+        vis.legend_text = vis.legend.selectAll(".legend_text")
+            .data(vis.colorScale.range().map(function (d, i) {
+                d = vis.colorScale.invertExtent(d);
+                if (i == 0) {
+                    return '< ' + customTickFormat(d[1])
+                }
+                else if (i == 6) {
+                    return '> ' + customTickFormat(d[0])
+                }
+                return customTickFormat(d[0]) + ' - ' + customTickFormat(d[1]);
+            }))
+
+        vis.legend_text.exit().transition(vis.t).remove()
+            .attr("x", 40)
             .attr("y", function (d, i) {
-                return vis.HEIGHT - (i * ls_h) - ls_h - 6;
+                return 215 - (i * ls_h);
             })
             .attr("font-size", ".9em")
             .text(function (d, i) {
-                if (i === 0) return "< " + customTickFormat(d[1]);
-                if (d[1] < d[0]) return customTickFormat(d[0])+"+";
-                return customTickFormat(d[0]) + " - " + customTickFormat(d[1]);
+                return d
             });
 
+        vis.legend_text.enter().append("text")
+            .merge(vis.legend_text)
+            .transition(vis.t)
+            .attr("class", "legend_text")
+            .attr("x", 40)
+            .attr("y", function (d, i) { return 215 - (i * ls_h); })
+            .attr("font-size", ".9em")
+            .text(function (d, i) {
+                return d;
+            });
 
-        vis.legend_heading.text(vis.headings[vis.variable]);
+        vis.legend_heading.transition(vis.t).text(vis.headings[vis.variable]);
+    }
+    clicked(d) {
+        const vis = this
+        
+        
+
     }
 }
-
-
 

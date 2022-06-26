@@ -16,6 +16,7 @@ let stackContinents = CONTINENTS
 let caseValueData;
 let caseMap;
 let caseLineChart;
+let centered;
 let lineValueData;
 let scatterValueData;
 let scatterPlot;

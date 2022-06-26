@@ -17,47 +17,52 @@
 <body>
     <nav class="navbar bg-light">
         <div class="container-fluid">
-            <div>
-                <p class="text-primary h5 text-uppercase col">Hisham Unniyankal</h1>
-                <p class="text-primary h6 text-uppercase col">Matricola: S5049651</h2>
-            </div>
-            <a class="navbar-brand float-right btn btn-outline-primary" href="./vaccine.html">Vaccine Visualization</a>
+            <p class="text-primary h5 text-uppercase col">Hisham Unniyankal : S5049651</p>
+            <a class="navbar-brand float-right btn btn-outline-primary" href="./vaccine.html">Vaccine</a>
         </div>
     </nav>
 
     <!-- Bootstrap grid setup -->
-    <div class="container-fluid">
+    <div class="container">
+        <div class="row map_container">
+            <h2 id="map_title" class="map_title">Covid cases per million people</h2>
+        </div>
+        
         <div class="row">
-            <select id="select-data" class="form-control">
-                <option selected value="case_million">Total Cases (per million)</option>
-                <option value="case">Total Cases</option>
-                <option value="death_million">Total Deaths (per million)</option>
-                <option value="death">Total Deaths</option>
-            </select>
             <div class="plot-cols">
                 <div id="case_map" class="case_map"></div>
-                <div id="timeline"></div>
             </div>
-
             <div class="plot-cols">
-                <div class="control-group">
-                    <select id="select-continent" class="form-control">
-                        <option selected value="World">All</option>
-                        <option value="Africa">Africa</option>
-                        <option value="Asia">Asia</option>
-                        <option value="Europe">Europe</option>
-                        <option value="North America">North America</option>
-                        <option value="South America">South America</option>
-                        <option value="Oceania">Oceania</option>
-                    </select>
-                    <button type="button" id="sortByValue" value="sortMax" class="btn btn-primary">Show lowest to highest</button>
-                </div>
-                <div id="case_line_chart" class="case_line_chart">
-                    <div id='line-tooltip' class="tooltip"></div>
-                </div>
-                <div id="case_scatter_plot" class="case_scatter_plot">
-                    
-                </div>
+                <select id="select-data" class="form-control">
+                    <option selected value="case_million">Total Cases (per million)</option>
+                    <option value="case">Total Cases</option>
+                    <option value="death_million">Total Deaths (per million)</option>
+                    <option value="death">Total Deaths</option>
+                </select>
+                <div class="map_legend_container"></div>
+            </div>
+        </div>
+
+        <div id="timeline"></div>
+        <div class="plot-cols">
+            <div class="control-group">
+                <select id="select-continent" class="form-control">
+                    <option selected value="World">All</option>
+                    <option value="Africa">Africa</option>
+                    <option value="Asia">Asia</option>
+                    <option value="Europe">Europe</option>
+                    <option value="North America">North America</option>
+                    <option value="South America">South America</option>
+                    <option value="Oceania">Oceania</option>
+                </select>
+                <button type="button" id="sortByValue" value="sortMax" class="btn btn-primary">Show lowest to
+                    highest</button>
+            </div>
+            <div id="case_line_chart" class="case_line_chart">
+                <div id='line-tooltip' class="tooltip"></div>
+            </div>
+            <div id="case_scatter_plot" class="case_scatter_plot">
+
             </div>
         </div>
     </div>

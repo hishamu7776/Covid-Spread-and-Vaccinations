@@ -2,6 +2,19 @@ $("#select-data").on("change", () => {
     caseMap.wrangleData()
     caseLineChart.wrangleData()
     timeline.wrangleData()
+
+    const titles = {
+        case: 'Total covid cases reported',
+        case_million: 'Covid cases per million people',
+        death: 'Total deaths reported due to covid',
+        death_million: 'Deaths reported per million people'
+    }
+
+    const col_name = $("#select-data").val()
+    const heading = titles[col_name]
+    $('#map_title').fadeOut(200, function () {
+        $(this).text(heading).fadeIn(200);
+    });
 })
 $("#select-vaccine-data").on("change", () => {
     packLayout.wrangleData()
@@ -25,13 +38,13 @@ $("#sort-vaccine").on("change", () => {
 $("#select-continent").on("change", () => {
     const continent = $("#select-continent").val()
     countryFilterOn = true
-    if(continent!="World"){
-        lineValueData = covidData.filter(function(d){
+    if (continent != "World") {
+        lineValueData = covidData.filter(function (d) {
             return d.continent == continent
         })
         caseValueData = lineValueData
         timelineValueData = lineValueData
-    }else{
+    } else {
         lineValueData = covidData
         caseValueData = covidData
         timelineValueData = covidData
@@ -40,16 +53,16 @@ $("#select-continent").on("change", () => {
     caseLineChart.wrangleData()
     timeline.wrangleData()
 })
-$("#sortByValue").button().click(function(){
-    if($("#sortByValue").val()=="sortMax"){
+$("#sortByValue").button().click(function () {
+    if ($("#sortByValue").val() == "sortMax") {
         $(this).text('Show highest to lowest');
         this.value = "sortMin"
-    }else{
-        $(this).text('Show lowest to highest');  
+    } else {
+        $(this).text('Show lowest to highest');
         this.value = "sortMax"
     }
     caseLineChart.wrangleData()
-});    
+});
 
 
 function filterByCountry(country_list) {
@@ -98,10 +111,10 @@ function wrap(text, width) {
             y = text.attr("y"),
             dy = 0, //parseFloat(text.attr("dy")),
             tspan = text.text(null)
-                        .append("tspan")
-                        .attr("x", x)
-                        .attr("y", y)
-                        .attr("dy", dy + "em");
+                .append("tspan")
+                .attr("x", x)
+                .attr("y", y)
+                .attr("dy", dy + "em");
         while (word = words.pop()) {
             line.push(word);
             tspan.text(line.join(" "));
@@ -110,27 +123,27 @@ function wrap(text, width) {
                 tspan.text(line.join(" "));
                 line = [word];
                 tspan = text.append("tspan")
-                            .attr("x", x)
-                            .attr("y", y)
-                            .attr("dy", ++lineNumber * lineHeight + dy + "em")
-                            .text(word);
+                    .attr("x", x)
+                    .attr("y", y)
+                    .attr("dy", ++lineNumber * lineHeight + dy + "em")
+                    .text(word);
             }
         }
     });
 }
 
 function brushed() {
-	const selection = d3.event.selection || timeline.x.range()
-	const newValues = selection.map(timeline.x.invert)
-	changeDates(newValues)
+    const selection = d3.event.selection || timeline.x.range()
+    const newValues = selection.map(timeline.x.invert)
+    changeDates(newValues)
 }
 
 function changeDates(values) {
 
-	newCovidData = covidData.filter(d => ((xParseTime(d.date) > values[0]) && (xParseTime(d.date) < values[1])))
+    newCovidData = covidData.filter(d => ((xParseTime(d.date) > values[0]) && (xParseTime(d.date) < values[1])))
 
-	$("#dateLabel1").text(formatTime(values[0]))
-	$("#dateLabel2").text(formatTime(values[1]))
+    $("#dateLabel1").text(formatTime(values[0]))
+    $("#dateLabel2").text(formatTime(values[1]))
 
     lineValueData = newCovidData
     caseValueData = newCovidData
@@ -139,5 +152,5 @@ function changeDates(values) {
     caseMap.wrangleData()
     caseLineChart.wrangleData()
     scatterPlot.wrangleData()
-    
+
 }
