@@ -84,6 +84,19 @@ class ScatterPlot {
         vis.t = d3.transition().duration(500)
 
         //For Legend
+        // Legend
+        vis.legend = d3.select(".scatter_legend_block")
+            .append('svg')
+            .attr('width', 200)
+            .attr('height', 300)
+            .append("g")
+            .attr("id", "maplegend");
+        vis.legend_heading = vis.legend.append("text")
+            .attr("class", "legend_heading")
+            .attr("x", 10)
+            .attr("y", 20)
+            .attr("fill", "#666")
+            .text("Continents")
 
         //For Tooltip
         //Create tooltip
@@ -121,7 +134,6 @@ class ScatterPlot {
             .map(function (d) {
                 return { iso_code: d.value.iso_code, location: d.key, continent: d.value.continent, case_per_million: d.value.case_per_million, tests_per_thousand: d.value.tests_per_thousand, death_per_million: d.value.death_per_million }
             })
-        vis.addLegend()
         vis.updateVis()
     }
     updateVis() {
@@ -177,31 +189,51 @@ class ScatterPlot {
                     .duration(200)
                     .style("opacity", 0);
             });
+        vis.addLegend()
     }
     addLegend() {
         const vis = this
-        vis.legend = d3.select(".scatter-legend-block")
-            .selectAll(".legend")
-            .data(vis.colorScale.domain())
-            .enter().append("g")
-            .attr("class", "legend")
-            .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; });
+
+        const ls_w = 25;
+        const ls_h = 25;
+
+        vis.legend_box = vis.legend.selectAll("rect").data(vis.colorScale.domain())
+
+        vis.legend_box.exit().remove()
+            .attr("x",0)
+            .attr("y", function (d, i) { return 160 - (i * ls_h); })
+            .attr("width", ls_w)
+            .attr("height", ls_h)
+            .style("fill", d => vis.colorScale(d));
 
         // draw legend colored rectangles
-        vis.legend.append("rect")
-            .attr("x", function(d){
-                console.log("Legend")
-            })
-            .attr("width", 18)
-            .attr("height", 18)
-            .style("fill", this.colorScale);
+        vis.legend_box.enter().append("rect")
+            .merge(vis.legend_box)
+            .attr("x",0)
+            .attr("y", function (d, i) { return 160 - (i * ls_h); })
+            .attr("width", ls_w)
+            .attr("height", ls_h)
+            .attr("cursor", "pointer")
+            .style("fill", d => vis.colorScale(d));
 
         // draw legend text
-        vis.legend.append("text")
-            .attr("x", 0)
-            .attr("y", 9)
-            .attr("dy", ".35em")
-            .style("text-anchor", "start")
-            .text(function (d) { return d; })
+        vis.legend_text = vis.legend.selectAll("text").data(vis.colorScale.domain())
+
+        vis.legend_text.exit().remove()
+            .attr("x",5+ls_w)
+            .attr("y", function (d, i) { return 180 - (i * ls_h); })
+            .attr("width", ls_w)
+            .attr("height", ls_h)
+            .text(d => d);
+
+        // draw legend colored rectangles
+        vis.legend_text.enter().append("text")
+            .merge(vis.legend_text)
+            .attr("x",5+ls_w)
+            .attr("y", function (d, i) { return 180 - (i * ls_h); })
+            .attr("width", ls_w)
+            .attr("height", ls_h)
+            .text(d => d);
+        
     }
 }
