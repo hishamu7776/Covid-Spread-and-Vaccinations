@@ -14,15 +14,17 @@ class Timeline {
     initVis() {
         const vis = this
 
-        vis.MARGIN = { LEFT: 20, RIGHT: 20, TOP: 0, BOTTOM: 20 }
-        vis.WIDTH = 850 - vis.MARGIN.LEFT - vis.MARGIN.RIGHT
-        vis.HEIGHT = 200 - vis.MARGIN.TOP - vis.MARGIN.BOTTOM
-        vis.variables = {
-            case: 'total_cases',
-            case_million: 'total_cases_million',
-            death: 'total_deaths',
-            death_million: 'total_death_million'
-        }
+        vis.MARGIN = { LEFT: 20, RIGHT: 20, TOP: 20, BOTTOM: 20 }
+        vis.WIDTH = 1100 - vis.MARGIN.LEFT - vis.MARGIN.RIGHT
+        vis.HEIGHT = 500 - vis.MARGIN.TOP - vis.MARGIN.BOTTOM
+
+        // scales
+        vis.x = d3.scaleTime().range([0, vis.WIDTH])
+        vis.y = d3.scaleLinear().range([vis.HEIGHT, 0])
+
+
+
+
         vis.svg = d3.select(vis.parentElement).append("svg")
             .attr("width", vis.WIDTH + vis.MARGIN.LEFT + vis.MARGIN.RIGHT)
             .attr("height", vis.HEIGHT + vis.MARGIN.TOP + vis.MARGIN.BOTTOM)
@@ -30,9 +32,12 @@ class Timeline {
         vis.g = vis.svg.append("g")
             .attr("transform", `translate(${vis.MARGIN.LEFT}, ${vis.MARGIN.TOP})`)
 
-        // scales
-        vis.x = d3.scaleTime().range([0, vis.WIDTH])
-        vis.y = d3.scaleLinear().range([vis.HEIGHT, 0])
+        vis.variables = {
+            case: 'total_cases',
+            case_million: 'total_cases_million',
+            death: 'total_deaths',
+            death_million: 'total_death_million'
+        }
 
         // x-axis
         vis.xAxisCall = d3.axisBottom()
@@ -42,7 +47,14 @@ class Timeline {
             .attr("transform", `translate(0, ${vis.HEIGHT})`)
 
         vis.areaPath = vis.g.append("path")
-            .attr("fill", "#ccc")
+        // area path generator
+        vis.area = d3.area()
+            .x(d => vis.x(xParseTime(d.date)))
+            .y0(function(d){
+                //console.log(d.date,vis.HEIGHT,vis.y(d.sum))
+                return vis.HEIGHT
+            })
+            .y1(function (d) { return vis.y(d.sum) })
 
         // initialize brush component
         vis.brush = d3.brushX()
@@ -71,35 +83,32 @@ class Timeline {
             .map(day => {
                 return {
                     date: day.key,
-                    sum: day.values.reduce((accumulator, current) => accumulator + current[vis.variable], 0)
+                    sum: d3.sum(day.values, function(d){ return d[vis.variable] })
                 }
             })
-
+        vis.dataFiltered = vis.dataFiltered.sort(function (a, b) { return xParseTime(a.date) - xParseTime(b.date); });
         vis.updateVis()
     }
 
     updateVis() {
         const vis = this
-
+        
         vis.t = d3.transition().duration(750)
-
         // update scales
         vis.x.domain(d3.extent(vis.dataFiltered, d => xParseTime(d.date)))
         vis.y.domain([0, d3.max(vis.dataFiltered, d => d.sum)])
 
         // update axes
         vis.xAxisCall.scale(vis.x)
+
         vis.xAxis.transition(vis.t).call(vis.xAxisCall)
 
-        // area path generator
-        vis.area = d3.area()
-            .x(d => vis.x(xParseTime(d.date)))
-            .y0(vis.HEIGHT)
-            .y1(d => vis.y(d.sum))
-
         vis.areaPath
-            .data([vis.dataFiltered])
+            .datum(vis.dataFiltered)
+            .attr("class", "timeline_area")
             .attr("d", vis.area)
+            .style("fill", "#ccc")
+
     }
 }
 

@@ -1,10 +1,21 @@
-
 /*Common styling*/
 body {
-    background-color: #FFFFFF;    
+    background-color: #FFFFFF;
 }
+
+.axis {
+font: 10px sans-serif;
+}
+.axis path,
+.axis line {
+fill: none;
+stroke: #D4D8DA;
+stroke-width: 2px;
+shape-rendering: crispEdges;
+}
+
 /*Tooltip styling*/
-.tooltip{
+.tooltip {
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -15,69 +26,87 @@ body {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.25);
-    -moz-box-shadow:    3px 3px 10px 0px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.25);
     -webkit-box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.25);
 }
-.tooltip h3{
+
+.tooltip h3 {
     font-size: .8em;
     margin-bottom: 2px;
     padding: 0;
 }
-.tooltip p{
+
+.tooltip p {
     font-size: .7em;
     margin-bottom: 2px;
     padding: 0;
 }
 
 /*Map related styling*/
-.map_title{
+.map_title {
     text-align: left;
     color: #666;
     margin: 20px 10px;
     transition: 500ms;
 }
-#select-data, #select-continent{
+
+#select-data,
+#select-continent {
     margin: 10px;
     font-size: .6em;
     width: 150px;
 }
-.plot-cols{
+
+.plot-cols {
     margin: 10px auto;
     background-color: #eee;
 }
-.map_legend_container{
-    margin: 20px 10px;
+
+.map_legend_container {
+    margin: 10px 10px;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
     background-color: #FFF;
 }
+
 /*Line Chart*/
-.radio-block{
+.radio-block {
     margin: 10px auto;
 }
 
+/*Timeline*/
+.timeline-container {
+    width: 100%;
+    margin: 0 auto;
+}
 
-#select-continent{
+.timeline_area {
+    stroke: #000;
+    stroke-width: 2px;
+}
+
+#select-continent {
     margin: 10px;
     font-size: .6em;
     width: 150px;
 }
 
-.col_active{
+.col_active {
     transition: .3s;
     stroke: "#333";
     stroke-width: 1.5;
 }
 
-.control-group{
+.control-group {
     padding: 0 50px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 
 }
-.minmax-group{
+
+.minmax-group {
     display: flex;
     flex-direction: row;
 }
