@@ -16,7 +16,7 @@ class Timeline {
 
         vis.MARGIN = { LEFT: 20, RIGHT: 20, TOP: 20, BOTTOM: 20 }
         vis.WIDTH = 1100 - vis.MARGIN.LEFT - vis.MARGIN.RIGHT
-        vis.HEIGHT = 500 - vis.MARGIN.TOP - vis.MARGIN.BOTTOM
+        vis.HEIGHT = 200 - vis.MARGIN.TOP - vis.MARGIN.BOTTOM
 
         // scales
         vis.x = d3.scaleTime().range([0, vis.WIDTH])

@@ -154,7 +154,7 @@ class ScatterPlot {
         // update axes
 
         vis.yAxisCall.scale(vis.y)
-        vis.yAxis.transition(vis.t).call(vis.yAxisCall)
+        vis.yAxis.transition().duration(500).call(vis.yAxisCall)
 
         vis.svg.selectAll(".dot")
             .data(vis.covidData)

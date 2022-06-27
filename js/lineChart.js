@@ -114,7 +114,7 @@ class LineChart {
         //Column_names
         vis.yColumn = vis.variables[$("#select-data").val()]
         vis.operation = $('input:radio[name=sortLine]:checked').val();
-
+        vis.all_date = []
         vis.covidData = d3.nest()
             .key(d => d.location)
             .rollup(function (values) {
@@ -123,6 +123,7 @@ class LineChart {
                     .entries(values)
                     .map(day => day.values.reduce(
                         (maxValue, current) => {
+                            vis.all_date.push(day.key)
                             maxValue.date = day.key
                             maxValue["total_cases"] = d3.max([maxValue["total_cases"], current["total_cases"]])
                             maxValue["total_cases_million"] = d3.max([maxValue["total_cases_million"], current["total_cases_million"]])
@@ -155,12 +156,11 @@ class LineChart {
     }
     updateVis() {
         const vis = this
-        const first_data = vis.covidData[0].value
+        vis.all_date = [...new Set(vis.all_date)]
         // update scales
-        vis.x.domain(d3.extent(first_data, function (d) {
-            return xParseTime(d.date);
+        vis.x.domain(d3.extent(vis.all_date, function (d) {
+            return xParseTime(d);
         }))
-
 
         vis.y.domain([
             d3.min(vis.covidData, d => d3.min(d.value, c => c[vis.yColumn])),
@@ -174,9 +174,9 @@ class LineChart {
         })
         // update axes
         vis.xAxisCall.scale(vis.x)
-
         
-        vis.xAxis.transition(vis.t)
+        vis.xAxis.transition()
+            .duration(500)
             .call(vis.xAxisCall)
             .selectAll("text")
             .style("text-anchor", "end")
@@ -186,7 +186,7 @@ class LineChart {
 
 
         vis.yAxisCall.scale(vis.y)
-        vis.yAxis.transition(vis.t).call(vis.yAxisCall)
+        vis.yAxis.transition().duration(500).call(vis.yAxisCall)
         vis.yLabel.text(vis.headings[vis.yColumn])
         vis.country = vis.g.selectAll(".countries")
             .data(vis.covidData);
@@ -196,7 +196,7 @@ class LineChart {
             .style("stroke-width", 3)
             .style("fill", "none")
             .merge(vis.country)
-            .transition(vis.t)
+            .transition().duration(500)
             .attr("d", d => vis.line(d.value))
 
         vis.country.enter()
