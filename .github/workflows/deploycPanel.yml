@@ -12,7 +12,7 @@ jobs:
         with:
           fetch-depth: 2
       - name: FTP-Deploy-Action
-        uses: Samkirkland/Ftp-Deploy-Action@v3
+        uses: Samkirkland/Ftp-Deploy-Action@3.1.1
         with:
           ftp-sever: ${{secrets .FTP_SERVER}}
           ftp-username: ${{secrets .FTP_USERNAME}}
