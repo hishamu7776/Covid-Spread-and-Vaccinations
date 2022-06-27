@@ -35,10 +35,10 @@ class PackLayout {
             .append("g")
             .attr("transform", `translate(${vis.MARGIN.LEFT}, ${vis.MARGIN.TOP})`)
 
-
         //Color Scale
-        vis.color = d3.scaleSequential(d3.interpolateBuGn)
+        vis.color = d3.scaleOrdinal()
             .domain([-1, 3])
+            .range(["#377eb8","#4daf4a","#984ea3"])
 
         //Create pack
         vis.pack = d3.pack().size([vis.WIDTH, vis.HEIGHT]).padding(2);

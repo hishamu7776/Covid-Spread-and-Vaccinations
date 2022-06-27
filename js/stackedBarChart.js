@@ -34,7 +34,7 @@ class StackedBarChart {
             .align(0.1);
         vis.x = d3.scaleLinear()
             .rangeRound([0, vis.WIDTH]);
-        vis.color = d3.scaleOrdinal().range(["#8dd3c7","#ffffb3","#bebada"]);
+        vis.color = d3.scaleOrdinal().range(["#377eb8","#4daf4a","#984ea3"]);
 
         // axis generators
         vis.xAxisCall = d3.axisBottom().ticks(6).tickFormat(customTickFormat);

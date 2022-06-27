@@ -51,8 +51,8 @@ function run(error, vaccine_data){
     barData = vaccineData
     packLayout = new PackLayout("#pack_layout")
     stackedBarChart = new StackedBarChart("#stacked_bar")
-    firstBarChart = new BarChart("#first_bar",'first_dose','First Dose Taken','#8dd3c7')
-    secondBarChart = new BarChart("#second_bar",'last_dose','Last Dose Taken',"#ffffb3")
-    boosterBarChart = new BarChart("#booster_bar",'booster_dose','Booster Dose Taken',"#bebada")
+    firstBarChart = new BarChart("#first_bar",'first_dose','First Dose Taken',"#377eb8")
+    secondBarChart = new BarChart("#second_bar",'last_dose','Last Dose Taken',"#4daf4a")
+    boosterBarChart = new BarChart("#booster_bar",'booster_dose','Booster Dose Taken',"#984ea3")
 }
 

@@ -61,7 +61,10 @@ class ScatterPlot {
         vis.y = d3.scaleLinear().range([vis.HEIGHT, 0])
         vis.area = d3.scaleLinear().range([10 * Math.PI, 100 * Math.PI])
         vis.colorScale = d3.scaleOrdinal().domain(CONTINENTS).range(d3.schemeCategory10);
-
+        vis.colorMap = {}
+        CONTINENTS.forEach(function (d) {
+            vis.colorMap[d] = vis.colorScale(d)
+        })
         //For Axis
         vis.xAxisCall = d3.axisBottom()
             .tickValues([1, 10, 100, 1000, 10000, 40000])
@@ -134,6 +137,7 @@ class ScatterPlot {
             .map(function (d) {
                 return { iso_code: d.value.iso_code, location: d.key, continent: d.value.continent, case_per_million: d.value.case_per_million, tests_per_thousand: d.value.tests_per_thousand, death_per_million: d.value.death_per_million }
             })
+
         vis.updateVis()
     }
     updateVis() {
@@ -156,9 +160,40 @@ class ScatterPlot {
         vis.yAxisCall.scale(vis.y)
         vis.yAxis.transition().duration(500).call(vis.yAxisCall)
 
-        vis.svg.selectAll(".dot")
-            .data(vis.covidData)
-            .enter().append("circle")
+        vis.dots = vis.svg.selectAll(".dot").data(vis.covidData)
+        vis.dots.exit().remove()
+            .attr("r",
+                function (d) {
+                    return Math.sqrt(vis.area(d[vis.sizeColumn]) / Math.PI)
+                }
+            )
+            .attr("cx", function (d) {
+                return vis.x(d[vis.xColumn]) || 0
+            })
+            .attr("cy", function (d) {
+                return vis.y(d[vis.yColumn]) || 0
+            })
+            .style("fill", d => vis.colorMap[d.continent])
+            .style("opacity", .8)
+            .on("mouseover", function (d) {
+                vis.tooltip.transition().duration(200).style("opacity", .9);
+                vis.tooltip.html(
+                    "<h3>" + d.location + " - " + d.continent + "</h3>"
+                    + "<p>" + vis.headings[vis.xColumn] + " : " + customTickFormat(d[vis.xColumn]) + "</p>"
+                    + "<p>" + vis.headings[vis.yColumn] + " : " + customTickFormat(d[vis.yColumn]) + "</p>"
+                    + "<p>" + vis.headings[vis.sizeColumn] + " : " + customTickFormat(d[vis.sizeColumn]) + "</p>"
+                )
+                vis.tooltip.style("left", (d3.event.pageX + 10) + "px")
+                    .style("top", (d3.event.pageY - 20) + "px")
+            })
+            .on("mouseout", function (d) {
+                vis.tooltip.transition(vis.t)
+                    .duration(200)
+                    .style("opacity", 0);
+            });
+
+        vis.dots.enter().append("circle")
+            .merge(vis.dots)
             .attr("class", "dot")
             .attr("r",
                 function (d) {
@@ -171,7 +206,7 @@ class ScatterPlot {
             .attr("cy", function (d) {
                 return vis.y(d[vis.yColumn]) || 0
             })
-            .style("fill", function (d) { return vis.colorScale(d.continent); })
+            .style("fill", d => vis.colorMap[d.continent])
             .style("opacity", .8)
             .on("mouseover", function (d) {
                 vis.tooltip.transition().duration(200).style("opacity", .9);
@@ -197,30 +232,30 @@ class ScatterPlot {
         const ls_w = 25;
         const ls_h = 25;
 
-        vis.legend_box = vis.legend.selectAll("rect").data(vis.colorScale.domain())
+        vis.legend_box = vis.legend.selectAll("rect").data(CONTINENTS)
 
         vis.legend_box.exit().remove()
-            .attr("x",0)
+            .attr("x", 0)
             .attr("y", function (d, i) { return 160 - (i * ls_h); })
             .attr("width", ls_w)
             .attr("height", ls_h)
-            .style("fill", d => vis.colorScale(d));
+            .style("fill", d => vis.colorMap[d]);
 
         // draw legend colored rectangles
         vis.legend_box.enter().append("rect")
             .merge(vis.legend_box)
-            .attr("x",0)
+            .attr("x", 0)
             .attr("y", function (d, i) { return 160 - (i * ls_h); })
             .attr("width", ls_w)
             .attr("height", ls_h)
             .attr("cursor", "pointer")
-            .style("fill", d => vis.colorScale(d));
+            .style("fill", d => vis.colorMap[d]);
 
         // draw legend text
         vis.legend_text = vis.legend.selectAll("text").data(vis.colorScale.domain())
 
         vis.legend_text.exit().remove()
-            .attr("x",5+ls_w)
+            .attr("x", 5 + ls_w)
             .attr("y", function (d, i) { return 180 - (i * ls_h); })
             .attr("width", ls_w)
             .attr("height", ls_h)
@@ -229,11 +264,11 @@ class ScatterPlot {
         // draw legend colored rectangles
         vis.legend_text.enter().append("text")
             .merge(vis.legend_text)
-            .attr("x",5+ls_w)
+            .attr("x", 5 + ls_w)
             .attr("y", function (d, i) { return 180 - (i * ls_h); })
             .attr("width", ls_w)
             .attr("height", ls_h)
             .text(d => d);
-        
+
     }
 }

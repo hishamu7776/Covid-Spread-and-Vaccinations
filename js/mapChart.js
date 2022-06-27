@@ -19,7 +19,7 @@ class MapChart {
             case_per_date: 'Total Cases',
             case_per_million: 'Total Case (per million)',
             death_per_date: 'Total Deaths',
-            death_per_million: 'Total Case (per million)'
+            death_per_million: 'Total Death (per million)'
         }
 
         vis.titles = {

@@ -68,10 +68,13 @@ function filterByCountry(country_list) {
         return !country_list.includes(d.iso_code) && !country_list.includes(d.iso_code)
     });
     lineValueData = caseValueData
+    scatterValueData = caseValueData
     timelineValueData = caseValueData
     //Update Chart
+
     caseMap.wrangleData()
     caseLineChart.wrangleData()
+    scatterPlot.wrangleData()
     timeline.wrangleData()
 }
 
@@ -86,11 +89,13 @@ function clearCountryFilters() {
         caseValueData = covidData
         lineValueData = covidData
         timelineValueData = covidData
+        scatterValueData = covidData
         countryFilterOn = false
 
         //Update Chart
         caseMap.wrangleData()
         caseLineChart.wrangleData()
+        scatterPlot.wrangleData()
         timeline.wrangleData()
     }
 }
