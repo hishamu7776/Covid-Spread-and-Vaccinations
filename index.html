@@ -25,9 +25,8 @@
     <!-- Bootstrap grid setup -->
     <div class="container">
         <div class="row map_container">
-            <h2 id="map_title" class="map_title">Covid cases per million people</h2>
+            <h3 id="map_title" class="map_title">Covid cases per million people</h3>
         </div>
-        
         <div class="row">
             <div class="plot-cols">
                 <div id="case_map" class="case_map"></div>
@@ -39,13 +38,6 @@
                     <option value="death_million">Total Deaths (per million)</option>
                     <option value="death">Total Deaths</option>
                 </select>
-                <div class="map_legend_container"></div>
-            </div>
-        </div>
-
-        <div id="timeline"></div>
-        <div class="plot-cols">
-            <div class="control-group">
                 <select id="select-continent" class="form-control">
                     <option selected value="World">All</option>
                     <option value="Africa">Africa</option>
@@ -55,6 +47,14 @@
                     <option value="South America">South America</option>
                     <option value="Oceania">Oceania</option>
                 </select>
+                <div class="map_legend_container"></div>
+            </div>
+        </div>
+
+        <div id="timeline"></div>
+        <div class="plot-cols">
+            <div class="control-group">
+                
                 <button type="button" id="sortByValue" value="sortMax" class="btn btn-primary">Show lowest to
                     highest</button>
             </div>

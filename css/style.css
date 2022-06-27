@@ -3,38 +3,7 @@
 body {
     background-color: #FFFFFF;    
 }
-
-/*Map related styling*/
-
-.map_title{
-    text-align: center;
-    color: #666;
-    margin: 20px auto 20px auto;
-    transition: 500ms;
-}
-
-#select-data{
-    margin: 10px;
-    font-size: .6em;
-    width: 150px;
-}
-
-.plot-cols{
-    margin: auto;
-    background-color: #eee;
-}
-
-.map_legend_container{
-    display: flex;
-    flex-direction: column;
-}
-
-#select-continent{
-    margin: 10px;
-    font-size: .6em;
-    width: 150px;
-}
-
+/*Tooltip styling*/
 .tooltip{
     position: absolute;
     display: flex;
@@ -58,6 +27,38 @@ body {
     font-size: .7em;
     margin-bottom: 2px;
     padding: 0;
+}
+
+/*Map related styling*/
+.map_title{
+    text-align: left;
+    color: #666;
+    margin: 20px 10px;
+    transition: 500ms;
+}
+#select-data, #select-continent{
+    margin: 10px;
+    font-size: .6em;
+    width: 150px;
+}
+.plot-cols{
+    margin: 0 auto;
+    background-color: #eee;
+}
+.map_legend_container{
+    margin: 20px 10px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    background-color: #FFF;
+}
+
+
+
+#select-continent{
+    margin: 10px;
+    font-size: .6em;
+    width: 150px;
 }
 
 .col_active{
