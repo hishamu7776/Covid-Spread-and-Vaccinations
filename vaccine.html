@@ -23,37 +23,41 @@
 	</nav>
 
 	<!-- Bootstrap grid setup -->
-	<div class="container-fluid">
+	<div class="container">
 		<div class="row">
-			<select class="col-md-4" id="top-selector" class="form-control">
-				<option selected value="20">Group A</option>
-				<option value="40">Group B</option>
-				<option value="60">Group C</option>
-				<option value="80">Group D</option>
-				<option value="100">Group E</option>
-				<option value="120">Group F</option>
-				<option value="140">Group G</option>
-				<option value="160">Group H</option>
-				<option value="180">Group I</option>
-				<option value="200">Group J</option>
-			</select>
-			<select class="col-md-4" id="sort-vaccine" class="form-control">
-				<option selected value="maxmin">Max to Min</option>
-				<option value="minmax">Min to Max</option>
-			</select>
-			<select class="col-md-4" id="select-vaccine-data" class="form-control">
-				<option selected value="total_vaccinated_per_million">Vaccinated (per Million)</option>
-				<option value="total_vaccinated">Vaccinated</option>
-			</select>
+			<div class="plot-cols col-md-6">
+				<div id="stacked_bar"></div>
+			</div>
+			<div class="plot-cols col-md-6">
+				<div class="filter-container">
+					<select id="top-selector" class="form-control">
+						<option selected value="20">Group A</option>
+						<option value="40">Group B</option>
+						<option value="60">Group C</option>
+						<option value="80">Group D</option>
+						<option value="100">Group E</option>
+						<option value="120">Group F</option>
+						<option value="140">Group G</option>
+						<option value="160">Group H</option>
+						<option value="180">Group I</option>
+						<option value="200">Group J</option>
+					</select>
+					<select id="sort-vaccine" class="form-control">
+						<option selected value="maxmin">Max to Min</option>
+						<option value="minmax">Min to Max</option>
+					</select>
+					<select id="select-vaccine-data" class="form-control">
+						<option selected value="total_vaccinated_per_million">Vaccinated (per Million)</option>
+						<option value="total_vaccinated">Vaccinated</option>
+					</select>
+				</div>
+				<div id="pack_layout"></div>
+			</div>
 		</div>
 		<div class="row">
-			<div id="stacked_bar"></div>
-			<div id="pack_layout"></div>
-			<div class="col">
-				<div id="first_bar"></div>
-				<div id="second_bar"></div>
-				<div id="booster_bar"></div>
-			</div>
+			<div class="plot-cols col-md-4"><div id="first_bar"></div></div>
+			<div class="plot-cols col-md-4"><div id="second_bar"></div></div>
+			<div class="plot-cols col-md-4"><div id="booster_bar"></div></div>
 		</div>
 	</div>
 

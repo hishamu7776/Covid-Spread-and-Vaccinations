@@ -1,15 +1,16 @@
 class BarChart {
-    constructor(_parentElement, _variable, _title) {
+    constructor(_parentElement, _variable, _title, _color) {
         this.parentElement = _parentElement
         this.variable = _variable
         this.title = _title
+        this.barColor = _color
         this.initVis()
     }
     initVis() {
         const vis = this
-        vis.MARGIN = { LEFT: 60, RIGHT: 50, TOP: 50, BOTTOM: 50 }
-        vis.WIDTH = 450 - vis.MARGIN.LEFT - vis.MARGIN.RIGHT
-        vis.HEIGHT = 200 - vis.MARGIN.TOP - vis.MARGIN.BOTTOM
+        vis.MARGIN = { LEFT: 60, RIGHT: 50, TOP: 50, BOTTOM: 80 }
+        vis.WIDTH = 400 - vis.MARGIN.LEFT - vis.MARGIN.RIGHT
+        vis.HEIGHT = 250 - vis.MARGIN.TOP - vis.MARGIN.BOTTOM
         vis.variableMap = {
             'total_vaccinated_per_million': '_per_million',
             'total_vaccinated': ''
@@ -57,7 +58,13 @@ class BarChart {
             .attr("text-anchor", "start")
             .text(vis.title)
 
-        vis.t = d3.transition().duration(500)
+        vis.t = d3.transition().duration(200)
+
+        //Create tooltip
+        vis.tooltip = d3.select("body")
+            .append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
 
         vis.wrangleData()
     }
@@ -66,9 +73,8 @@ class BarChart {
         vis.new_variable = vis.variable + vis.variableMap[$("#select-vaccine-data").val()]
         vis.sorting = $("#sort-vaccine").val()
         vis.group = parseInt($("#top-selector").val())
-        console.log(vis.new_variable)
         vis.vaccineData = d3.nest()
-            .key(d => d.location)
+            .key(d => d.iso_code)
             .rollup(function (d) {
                 var new_row = {}
                 new_row[vis.new_variable] = d3.sum(d, data => data[vis.new_variable])
@@ -77,7 +83,7 @@ class BarChart {
             .entries(barData)
             .map(function (data) {
                 var d = {}
-                d.location = data.key
+                d.iso_code = data.key
                 d.dose = data.value[vis.new_variable]
                 return d
             })
@@ -89,7 +95,7 @@ class BarChart {
                 return d
             }
         })
-        
+
         vis.updateVis()
     }
     updateVis() {
@@ -97,7 +103,7 @@ class BarChart {
 
         // update scales
         vis.y.domain([0, d3.max(vis.vaccineData, d => Number(d.dose))])
-        vis.x.domain(this.vaccineData.map(function (d) { return d.location; }));
+        vis.x.domain(vis.vaccineData.map(function (d) { return d.iso_code; }));
 
         // update axes
         vis.xAxisCall.scale(vis.x)
@@ -107,16 +113,16 @@ class BarChart {
             .style("text-anchor", "end")
             .attr("dx", "-1em")
             .attr("dy", "-0.5em")
-            .attr("transform", "rotate(-40)");
+            .attr("transform", "rotate(-90)");
 
         vis.yAxisCall.scale(vis.y)
         vis.yAxis.transition(vis.t).call(vis.yAxisCall)
 
         vis.rect = vis.g.selectAll("rect").data(vis.vaccineData)
-        
+
         vis.rect.exit().remove()
             .attr("x", function (d) {
-                return vis.x(d.location);
+                return vis.x(d.iso_code);
             })
             .attr("y", function (d) {
                 return vis.y(Number(d.dose));
@@ -125,13 +131,13 @@ class BarChart {
             .attr("height", function (d) {
                 return vis.HEIGHT - vis.y(Number(d.dose));
             })
-            .style("fill","#999");
+            .style("fill", vis.barColor)
 
         vis.rect.enter().append("rect")
             .merge(vis.rect)
             .transition(vis.t)
             .attr("x", function (d) {
-                return vis.x(d.location);
+                return vis.x(d.iso_code);
             })
             .attr("y", function (d) {
                 return vis.y(d.dose);
@@ -140,6 +146,23 @@ class BarChart {
             .attr("height", function (d) {
                 return vis.HEIGHT - vis.y(d.dose);
             })
-            .style("fill","#999");
+            .style("fill", vis.barColor);
+
+        vis.g.selectAll("rect").on("mouseover", function (d) {
+            vis.tooltip.transition().duration(100).style("opacity", .9);
+            vis.tooltip.html(
+                "<h3> Country - " + iso_map[d.iso_code] + "</h3>"
+                + "<p> Dose : " + customTickFormat(d.dose) + "</p>"
+            )
+            vis.tooltip.style("left", (d3.event.pageX + 10) + "px")
+                .style("top", (d3.event.pageY - 20) + "px")
+                .on("mouseout", function (d) {
+                    vis.tooltip.transition().duration(100)
+                        .style("opacity", 0);
+                });
+        }).on("mouseout", function (d) {
+            vis.tooltip.transition().duration(100)
+                .style("opacity", 0);
+        });
     }
 }

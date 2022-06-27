@@ -51,7 +51,10 @@ shape-rendering: crispEdges;
 }
 
 #select-data,
-#select-continent {
+#select-continent,
+#top-selector,
+#sort-vaccine,
+#select-vaccine-data {
     margin: 10px;
     font-size: .6em;
     width: 150px;
@@ -109,4 +112,17 @@ shape-rendering: crispEdges;
 .minmax-group {
     display: flex;
     flex-direction: row;
+}
+
+/*Vaccine Filters*/
+.filter-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+
+}
+.barText{
+    font-size: .4em; 
+    font-weight: 600;
 }

@@ -34,7 +34,7 @@ class PackLayout {
             .attr("height", vis.HEIGHT + vis.MARGIN.TOP + vis.MARGIN.BOTTOM)
             .append("g")
             .attr("transform", `translate(${vis.MARGIN.LEFT}, ${vis.MARGIN.TOP})`)
-            
+
 
         //Color Scale
         vis.color = d3.scaleSequential(d3.interpolateBuGn)
@@ -87,53 +87,51 @@ class PackLayout {
         vis.view;
 
 
-        vis.node = vis.svg.selectAll("g").data(vis.nodes)
-
-        vis.circles = vis.node.enter()
-            .append("circle")
+        vis.circles = vis.svg.append("g").selectAll("circle")
+            .data(vis.nodes)
+            .join("circle")
             .style("fill", function (d) { return vis.color(d.depth); })
             .attr('cx', function (d) { return d.x; })
             .attr('cy', function (d) { return d.y; })
 
 
+
         vis.events = vis.circles.on("mouseover", function (d) {
-                vis.tooltip.transition().duration(200).style("opacity", .7);
-                if (d.children == undefined) {
-                    vis.tooltip.html(
-                        "<h3>" + vis.heading[vis.variable] + "</h3>"
-                        + "<p> Country : " + d.data.name + "</p>"
-                        + "<p> Continent : " + d.parent.data.name + "</p>"
-                        + "<p>" + "Value : " + customTickFormat(d.value) + "</p>"
-                    )
-                } else if (d.parent == null) {
-                    vis.tooltip.html(
-                        "<h3>" + vis.heading[vis.variable] + "</h3>"
-                        + "<p>" + "Value : " + customTickFormat(d.value) + "</p>"
-                    )
-                } else {
-                    vis.tooltip.html(
-                        "<h3>" + vis.heading[vis.variable] + "</h3>"
-                        + "<p> Continent : " + d.data.name + "</p>"
-                        + "<p>" + "Value : " + customTickFormat(d.value) + "</p>"
-                    )
-                }                
-                vis.tooltip.style("left", (d3.event.pageX + 10) + "px")
-                    .style("top", (d3.event.pageY - 20) + "px")
-            })
+            vis.tooltip.transition().duration(200).style("opacity", .7);
+            if (d.children == undefined) {
+                vis.tooltip.html(
+                    "<h3>" + vis.heading[vis.variable] + "</h3>"
+                    + "<p> Country : " + d.data.name + "</p>"
+                    + "<p> Continent : " + d.parent.data.name + "</p>"
+                    + "<p>" + "Value : " + customTickFormat(d.value) + "</p>"
+                )
+            } else if (d.parent == null) {
+                vis.tooltip.html(
+                    "<h3>" + vis.heading[vis.variable] + "</h3>"
+                    + "<p>" + "Value : " + customTickFormat(d.value) + "</p>"
+                )
+            } else {
+                vis.tooltip.html(
+                    "<h3>" + vis.heading[vis.variable] + "</h3>"
+                    + "<p> Continent : " + d.data.name + "</p>"
+                    + "<p>" + "Value : " + customTickFormat(d.value) + "</p>"
+                )
+            }
+            vis.tooltip.style("left", (d3.event.pageX + 10) + "px")
+                .style("top", (d3.event.pageY - 20) + "px")
+        })
             .on("mouseout", function (d) {
                 vis.tooltip.transition(vis.t)
                     .duration(200)
                     .style("opacity", 0);
             })
-            .on("click", function(d) { if (vis.focus !== d) vis.zoom(d), d3.event.stopPropagation(); })
+            .on("click", function (d) { if (vis.focus !== d) vis.zoom(d), d3.event.stopPropagation(); })
             .transition().duration(400)
             .attr('r', function (d) { return d.r; })
-            vis.svg.on("click", function(d, i) {
-                vis.zoom(d)
-            }); 
-
-                
-                
+        
+        vis.svg.on("click", function (d, i) {
+            vis.zoom(d)
+        });
 
     }
     zoom(d) {
@@ -142,20 +140,20 @@ class PackLayout {
         var k = vis.WIDTH / d.r / 2;
         vis.x.domain([d.x - d.r, d.x + d.r]);
         vis.y.domain([d.y - d.r, d.y + d.r]);
-        
+
         var transition = vis.svg.transition()
-        .duration(d3.event.altKey ? 7500 : 750);
+            .duration(d3.event.altKey ? 7500 : 750);
 
         transition.selectAll("circle")
-        .attr("cx", function(d) {
-            return vis.x(d.x);
-        })
-        .attr("cy", function(d) {
-            return vis.y(d.y);
-        })
-        .attr("r", function(d) {
-            return k * d.r;
-        });
+            .attr("cx", function (d) {
+                return vis.x(d.x);
+            })
+            .attr("cy", function (d) {
+                return vis.y(d.y);
+            })
+            .attr("r", function (d) {
+                return k * d.r;
+            });
 
         vis.focus = d;
         d3.event.stopPropagation();

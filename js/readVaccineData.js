@@ -10,7 +10,7 @@ const customTickFormat = function (d){
 
 let vaccineData;
 let barData;
-
+let iso_map = {}
 let packData;
 let packLayout;
 let stackedBarChart;
@@ -23,6 +23,7 @@ let all_countries = [];
 
 Promise.all([
     d3.csv('data\\vaccineData.csv',function(d){
+        iso_map[d.iso_code] = d.location
         d['population'] = +d['population']
         d['first_dose'] = +d['first_dose']
         d['last_dose'] = +d['last_dose']
@@ -35,6 +36,7 @@ Promise.all([
         d['first_dose_per_million'] = +d['first_dose_per_million']
         d['last_dose_per_million'] = +d['last_dose_per_million']
         d['booster_per_million'] = +d['booster_per_million']
+        
         return d
     })
 ]).then(
@@ -49,8 +51,8 @@ function run(error, vaccine_data){
     barData = vaccineData
     packLayout = new PackLayout("#pack_layout")
     stackedBarChart = new StackedBarChart("#stacked_bar")
-    firstBarChart = new BarChart("#first_bar",'first_dose','First Dose Taken')
-    secondBarChart = new BarChart("#second_bar",'last_dose','Last Dose Taken')
-    boosterBarChart = new BarChart("#booster_bar",'booster_dose','Booster Dose Taken')
+    firstBarChart = new BarChart("#first_bar",'first_dose','First Dose Taken','#8dd3c7')
+    secondBarChart = new BarChart("#second_bar",'last_dose','Last Dose Taken',"#ffffb3")
+    boosterBarChart = new BarChart("#booster_bar",'booster_dose','Booster Dose Taken',"#bebada")
 }
 
