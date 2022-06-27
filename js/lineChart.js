@@ -167,7 +167,7 @@ class LineChart {
             d3.max(vis.covidData, d => d3.max(d.value, c => c[vis.yColumn]))
         ]).nice();
 
-        vis.colorScale.domain(vis.covidData,d => d.key).range(d3.schemeCategory10);
+        vis.colorScale.domain(vis.covidData,d => d.key).range(["#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf"]);
         vis.colorMap = {}
         vis.covidData.forEach(function(d){
             vis.colorMap[d.key] = vis.colorScale(d.key);
@@ -206,7 +206,7 @@ class LineChart {
             .style("stroke-width", 3)
             .style("fill", "none")
             .merge(vis.country)
-            .transition(vis.t)
+            .transition().duration(500)
             .attr("d", d => vis.line(d.value))
 
         d3.selectAll(".line_legend_entry").remove();

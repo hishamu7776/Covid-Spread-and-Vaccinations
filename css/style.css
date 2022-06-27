@@ -85,8 +85,7 @@ shape-rendering: crispEdges;
 }
 
 .timeline_area {
-    stroke: #000;
-    stroke-width: 2px;
+    stroke-width: 1px;
 }
 
 #select-continent {
