@@ -28,10 +28,10 @@
             <h3 id="map_title" class="map_title">Covid cases per million people</h3>
         </div>
         <div class="row">
-            <div class="plot-cols">
+            <div class="plot-cols col-md-9">
                 <div id="case_map" class="case_map"></div>
             </div>
-            <div class="plot-cols">
+            <div class="plot-cols col-md-3">
                 <select id="select-data" class="form-control">
                     <option selected value="case_million">Total Cases (per million)</option>
                     <option value="case">Total Cases</option>
@@ -50,20 +50,34 @@
                 <div class="map_legend_container"></div>
             </div>
         </div>
-
+        <div class="row">
+            <div class="plot-cols col-md-5">
+                <label>Dates: <span id="dateLabel1">Feb-2020</span> - <span id="dateLabel2">June-2022</span></label>
+                <div id="case_line_chart" class="case_line_chart">
+                    <div id='line-tooltip' class="tooltip"></div>
+                </div>
+            </div>
+            <div class="plot-cols col-md-5">
+                <label>Number of covid cases reported per test conducted.</label>
+                <div id="case_scatter_plot" class="case_scatter_plot"></div>
+            </div>
+            <div class="plot-cols col-md-2">
+                <div class="radio-block">
+                    <div class="form-check  form-check-inline">
+                        <input checked class="form-check-input" type="radio" name="sortLine"  id="maxmin" value="sortMax">
+                        <label class="form-check-label" for="maxmin">Max</label>
+                    </div>
+                    <div class="form-check  form-check-inline">
+                        <input class="form-check-input" type="radio" name="sortLine"  id="minmax" value="sortMin">
+                        <label class="form-check-label" for="minmax">Min</label>
+                    </div>
+                </div>
+                <div class="scatter-legend-block"></div>
+            </div>
+        </div>
         <div id="timeline"></div>
         <div class="plot-cols">
-            <div class="control-group">
-                
-                <button type="button" id="sortByValue" value="sortMax" class="btn btn-primary">Show lowest to
-                    highest</button>
-            </div>
-            <div id="case_line_chart" class="case_line_chart">
-                <div id='line-tooltip' class="tooltip"></div>
-            </div>
-            <div id="case_scatter_plot" class="case_scatter_plot">
-
-            </div>
+            
         </div>
     </div>
 

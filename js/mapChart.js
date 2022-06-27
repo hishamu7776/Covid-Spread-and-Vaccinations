@@ -79,7 +79,7 @@ class MapChart {
                     .translate([vis.WIDTH / 2, vis.HEIGHT / 2])
                     .scale(130)
             )
-        vis.t = d3.transition().duration(500)
+        vis.t = d3.transition().duration(1000)
         // Legend
         vis.legend = d3.select(".map_legend_container")
             .append('svg')
@@ -369,7 +369,7 @@ class MapChart {
                 return customTickFormat(d[0]) + ' - ' + customTickFormat(d[1]);
             }))
 
-        vis.legend_text.exit().transition(vis.t).remove()
+        vis.legend_text.exit().remove()
             .attr("x", 40)
             .attr("y", function (d, i) {
                 return 215 - (i * ls_h);
@@ -381,7 +381,6 @@ class MapChart {
 
         vis.legend_text.enter().append("text")
             .merge(vis.legend_text)
-            .transition(vis.t)
             .attr("class", "legend_text")
             .attr("x", 40)
             .attr("y", function (d, i) { return 215 - (i * ls_h); })
@@ -390,7 +389,7 @@ class MapChart {
                 return d;
             });
 
-        vis.legend_heading.transition(vis.t).text(vis.headings[vis.variable]);
+        vis.legend_heading.text(vis.headings[vis.variable]);
     }
     clicked(d){
         const vis = this

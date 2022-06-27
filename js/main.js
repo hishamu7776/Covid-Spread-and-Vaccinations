@@ -44,26 +44,22 @@ $("#select-continent").on("change", () => {
         })
         caseValueData = lineValueData
         timelineValueData = lineValueData
+        scatterValueData = lineValueData
     } else {
         lineValueData = covidData
         caseValueData = covidData
         timelineValueData = covidData
+        scatterValueData = covidData
     }
     caseMap.wrangleData()
     caseLineChart.wrangleData()
+    scatterPlot.wrangleData()
     timeline.wrangleData()
 })
-$("#sortByValue").button().click(function () {
-    if ($("#sortByValue").val() == "sortMax") {
-        $(this).text('Show highest to lowest');
-        this.value = "sortMin"
-    } else {
-        $(this).text('Show lowest to highest');
-        this.value = "sortMax"
-    }
+
+$('input[type=radio][name=sortLine]').change(function() {
     caseLineChart.wrangleData()
 });
-
 
 function filterByCountry(country_list) {
     countryFilterOn = true

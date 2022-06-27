@@ -15,8 +15,8 @@ class LineChart {
     initVis() {
         const vis = this
         vis.MARGIN = { LEFT: 80, RIGHT: 10, TOP: 10, BOTTOM: 60 }
-        vis.WIDTH = 500 - vis.MARGIN.LEFT - vis.MARGIN.RIGHT
-        vis.HEIGHT = 300 - vis.MARGIN.TOP - vis.MARGIN.BOTTOM
+        vis.WIDTH = 400 - vis.MARGIN.LEFT - vis.MARGIN.RIGHT
+        vis.HEIGHT = 250 - vis.MARGIN.TOP - vis.MARGIN.BOTTOM
         vis.lineStroke = "2px"
 
         vis.headings = {
@@ -105,7 +105,7 @@ class LineChart {
 
 
         //for transition
-        vis.t = d3.transition().duration(500)
+        vis.t = d3.transition().duration(1000)
         vis.addLegend()
         vis.wrangleData()
     }
@@ -113,7 +113,8 @@ class LineChart {
         const vis = this
         //Column_names
         vis.yColumn = vis.variables[$("#select-data").val()]
-        vis.operation = $("#sortByValue").val()
+        vis.operation = $('input:radio[name=sortLine]:checked').val();
+
         vis.covidData = d3.nest()
             .key(d => d.location)
             .rollup(function (values) {
@@ -143,21 +144,20 @@ class LineChart {
             vis.covidData = vis.covidData.sort(function(a,b){
                 return d3.descending(d3.max(a.value,d => d[vis.yColumn]),d3.max(b.value,d => d[vis.yColumn]))
             })
-        }else{
+        }else if(vis.operation == "sortMin"){
             vis.covidData = vis.covidData.sort(function(a,b){
                 return d3.ascending(d3.min(a.value,d => d[vis.yColumn]),d3.min(b.value,d => d[vis.yColumn]))
             })
         }
 
         vis.covidData = vis.covidData.slice(0,5)
-
         vis.updateVis()
     }
     updateVis() {
         const vis = this
-
+        const first_data = vis.covidData[0].value
         // update scales
-        vis.x.domain(d3.extent(covidData, function (d) {
+        vis.x.domain(d3.extent(first_data, function (d) {
             return xParseTime(d.date);
         }))
 
@@ -191,7 +191,13 @@ class LineChart {
         vis.country = vis.g.selectAll(".countries")
             .data(vis.covidData);
 
-        vis.country.exit().remove();
+        vis.country.exit().remove()
+            .style("stroke", d => vis.colorMap[d.key])
+            .style("stroke-width", 3)
+            .style("fill", "none")
+            .merge(vis.country)
+            .transition(vis.t)
+            .attr("d", d => vis.line(d.value))
 
         vis.country.enter()
             .append("path")
@@ -216,45 +222,6 @@ class LineChart {
             .data(vis.covidData)
             .enter().append("g")
             .attr("class", "line_legend_entry");
-        
-        /*
-
-        vis.rect = vis.legend_entry.append("rect")
-            .attr("x", function(d,i){
-                if(i%2 == 0){
-                     vis.x_pos = 90
-                     return vis.x_pos
-                }
-                vis.x_pos = vis.x_pos+300
-                return vis.x_pos
-            })
-            .attr("y", function(d,i){
-                if(i%2 == 0){
-                    vis.y_pos = vis.y_pos+30
-                }
-                return vis.y_pos
-            })
-            .attr("id", function (d) {
-                return d.key
-            })
-            .attr("width", ls_w)
-            .attr("height", ls_h)
-            .attr("opacity", .8)
-            .attr("cursor", "pointer")
-            .style("fill", function (d) {
-                return vis.colorMap[d.key];
-            })
-            .style("transition",".5s")
-        
-        vis.text = vis.legend_entry.append("text")
-            .attr("font-size", "1em")
-            .style("fill", function (d) {
-                return vis.colorMap[d.key];
-            })
-            .text(function (d) {                
-                return d.key
-            }).call(wrap, 300);
-        */
         vis.tip = vis.g.append('rect')
             .attr('height', vis.HEIGHT)    
             .attr('width', vis.WIDTH)
@@ -275,8 +242,8 @@ class LineChart {
                     .style('display','block')
                     .style("opacity",.9)
                     .style("width","200px")
-                    .style('left', d3.mouse(this)[0] + 780+"px")
-                    .style('top', d3.mouse(this)[1]+ 10 +"px")
+                    .style('left', d3.mouse(this)[0] - 80+"px")
+                    .style('top', d3.mouse(this)[1] - 80 +"px")
                     .attr('left', 200)
                     .attr('top', 50)
                     .selectAll()

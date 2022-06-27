@@ -18,8 +18,8 @@ class ScatterPlot {
 
         //Setting Layout
         vis.MARGIN = { LEFT: 80, RIGHT: 10, TOP: 10, BOTTOM: 60 }
-        vis.WIDTH = 500 - vis.MARGIN.LEFT - vis.MARGIN.RIGHT
-        vis.HEIGHT = 300 - vis.MARGIN.TOP - vis.MARGIN.BOTTOM
+        vis.WIDTH = 400 - vis.MARGIN.LEFT - vis.MARGIN.RIGHT
+        vis.HEIGHT = 250 - vis.MARGIN.TOP - vis.MARGIN.BOTTOM
 
         vis.svg = d3.select(vis.parentElement).append("svg")
             .attr("width", vis.WIDTH + vis.MARGIN.LEFT + vis.MARGIN.RIGHT)
@@ -180,7 +180,8 @@ class ScatterPlot {
     }
     addLegend() {
         const vis = this
-        vis.legend = vis.svg.selectAll(".legend")
+        vis.legend = d3.select(".scatter-legend-block")
+            .selectAll(".legend")
             .data(vis.colorScale.domain())
             .enter().append("g")
             .attr("class", "legend")
@@ -188,14 +189,16 @@ class ScatterPlot {
 
         // draw legend colored rectangles
         vis.legend.append("rect")
-            .attr("x", vis.WIDTH - vis.WIDTH*9.5/10)
+            .attr("x", function(d){
+                console.log("Legend")
+            })
             .attr("width", 18)
             .attr("height", 18)
             .style("fill", this.colorScale);
 
         // draw legend text
         vis.legend.append("text")
-            .attr("x", vis.WIDTH - vis.WIDTH*9.5/10+24)
+            .attr("x", 0)
             .attr("y", 9)
             .attr("dy", ".35em")
             .style("text-anchor", "start")

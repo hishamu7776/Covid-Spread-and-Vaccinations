@@ -42,7 +42,7 @@ body {
     width: 150px;
 }
 .plot-cols{
-    margin: 0 auto;
+    margin: 10px auto;
     background-color: #eee;
 }
 .map_legend_container{
@@ -52,7 +52,10 @@ body {
     flex-direction: column;
     background-color: #FFF;
 }
-
+/*Line Chart*/
+.radio-block{
+    margin: 10px auto;
+}
 
 
 #select-continent{
