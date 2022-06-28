@@ -134,7 +134,7 @@ class MapChart {
         const vis = this
 
         vis.colorScale.domain(vis.ranges[vis.variable])
-            .range(["#eff3ff","#c6dbef","#9ecae1","#6baed6","#4292c6","#2171b5","#084594"]);
+            .range(["#feedde","#fdd0a2","#fdae6b","#fd8d3c","#f16913","#d94801","#8c2d04"]);
 
         vis.mapplot = vis.g.selectAll(".country").data(vis.geoMap.features)
 

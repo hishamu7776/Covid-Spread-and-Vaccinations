@@ -60,7 +60,7 @@ class ScatterPlot {
         vis.x = d3.scaleLog().range([0, vis.WIDTH]).domain([.1, 40000])
         vis.y = d3.scaleLinear().range([vis.HEIGHT, 0])
         vis.area = d3.scaleLinear().range([10 * Math.PI, 100 * Math.PI])
-        vis.colorScale = d3.scaleOrdinal().domain(CONTINENTS).range(d3.schemeCategory10);
+        vis.colorScale = d3.scaleOrdinal().domain(CONTINENTS).range(["#4e79a7","#f28e2c","#e15759","#76b7b2","#59a14f","#edc949","#af7aa1","#ff9da7","#9c755f","#bab0ab"]);
         vis.colorMap = {}
         CONTINENTS.forEach(function (d) {
             vis.colorMap[d] = vis.colorScale(d)

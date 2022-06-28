@@ -37,8 +37,8 @@ class PackLayout {
 
         //Color Scale
         vis.color = d3.scaleOrdinal()
-            .domain([-1, 3])
-            .range(["#377eb8","#4daf4a","#984ea3"])
+            .domain([-1, 3])            
+            .range(["#ff9da7","#9c755f","#bab0ab"])
 
         //Create pack
         vis.pack = d3.pack().size([vis.WIDTH, vis.HEIGHT]).padding(2);

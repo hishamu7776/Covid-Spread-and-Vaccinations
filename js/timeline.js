@@ -107,7 +107,9 @@ class Timeline {
             .datum(vis.dataFiltered)
             .attr("class", "timeline_area")
             .attr("d", vis.area)
-            .style("fill", "#6baed6")
+            .style("stroke", "#e15759")
+            .style("stroke-width", "2px")
+            .style("fill", "#f28e2c")
 
     }
 }
