@@ -147,7 +147,7 @@ class StackedBarChart {
         vis.g.selectAll("g.vaccine").selectAll("rect").on("mouseover", function (d) {
             vis.tooltip.transition().duration(200).style("opacity", .9);
             vis.tooltip.html(
-                "<h3> Country - " + d.location + "</h3>"
+                "<h3> Country - " + d.data.location + "</h3>"
                 + "<p> First Dose : " + customTickFormat(d.data.a) + "</p>"
                 + "<p> Second Dose : " + customTickFormat(d.data.b) + "</p>"
                 + "<p> Booster Dose : " + customTickFormat(d.data.c) + "</p>"
