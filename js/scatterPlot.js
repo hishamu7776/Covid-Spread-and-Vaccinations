@@ -51,7 +51,7 @@ class ScatterPlot {
             .attr("class", "y axisLabel")
             .attr("transform", "rotate(-90)")
             .attr("y", -40)
-            .attr("x", -130)
+            .attr("x", -80)
             .attr("font-size", "16px")
             .attr("text-anchor", "middle")
             .text("Total Cases (per million)")

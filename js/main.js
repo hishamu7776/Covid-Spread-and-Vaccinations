@@ -10,10 +10,21 @@ $("#select-data").on("change", () => {
         death_million: 'Deaths reported per million people'
     }
 
+    const line_titles = {
+        case: 'Monthly reported covid cases over the period',
+        case_million: 'Monthly reported covid cases over the period(per Million)',
+        death: 'Deaths happend due to covid over the period',
+        death_million: 'Deaths happend due to covid over the period(per million)'
+    }
+
     const col_name = $("#select-data").val()
     const heading = titles[col_name]
+    const line_heading = line_titles[col_name]
     $('#map_title').fadeOut(200, function () {
         $(this).text(heading).fadeIn(200);
+    });
+    $('#line_title').fadeOut(200, function () {
+        $(this).text(line_heading).fadeIn(200);
     });
 })
 $("#select-vaccine-data").on("change", () => {

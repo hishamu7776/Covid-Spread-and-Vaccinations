@@ -73,7 +73,7 @@ class LineChart {
             .attr("class", "y axisLabel")
             .attr("transform", "rotate(-90)")
             .attr("y", -40)
-            .attr("x", -130)
+            .attr("x", -80)
             .attr("font-size", "16px")
             .attr("text-anchor", "middle")
 
@@ -188,6 +188,7 @@ class LineChart {
         vis.yAxisCall.scale(vis.y)
         vis.yAxis.transition().duration(500).call(vis.yAxisCall)
         vis.yLabel.text(vis.headings[vis.yColumn])
+        
         vis.country = vis.g.selectAll(".countries")
             .data(vis.covidData);
 
@@ -198,6 +199,7 @@ class LineChart {
             .merge(vis.country)
             .transition().duration(500)
             .attr("d", d => vis.line(d.value))
+            .text("sadsad")
 
         vis.country.enter()
             .append("path")
@@ -208,6 +210,8 @@ class LineChart {
             .merge(vis.country)
             .transition().duration(500)
             .attr("d", d => vis.line(d.value))
+            .text("sadsad")
+            
 
         d3.selectAll(".line_legend_entry").remove();
         const ls_h = 20

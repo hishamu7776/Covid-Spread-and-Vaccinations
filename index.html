@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="description" content="">
-    <title>How covid spread all over the world?</title>
+    <title>What are the countries which affected by covid the most</title>
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -25,13 +25,13 @@
     <!-- Bootstrap grid setup -->
     <div class="container">
         <div class="row map_container">
-            <h3 id="map_title" class="map_title">Covid cases per million people</h3>
+            <h3 id="map_title" class="map_title">Confirmed covid cases by countries.</h3>
         </div>
-        <div class="row">
-            <div class="plot-cols col-md-9">
+        <div class="map-responsive-class row">
+            <div class="plot-cols col-md-9 col-sm-12">
                 <div id="case_map" class="case_map"></div>
             </div>
-            <div class="plot-cols col-md-3">
+            <div class="plot-cols col-md-3 col-sm-12">
                 <select id="select-data" class="form-control">
                     <option selected value="case_million">Total Cases (per million)</option>
                     <option value="case">Total Cases</option>
@@ -52,13 +52,13 @@
         </div>
         <div class="row">
             <div class="plot-cols col-md-5">
-                <label>Dates: <span id="dateLabel1">Feb-2020</span> - <span id="dateLabel2">June-2022</span></label>
+                <label><b><span id="line_title" class="line_title">Monthly reported covid cases over the period</span> <span id="dateLabel1">Feb-2020</span> - <span id="dateLabel2">June-2022</span></b></label>
                 <div id="case_line_chart" class="case_line_chart">
                     <div id='line-tooltip' class="tooltip"></div>
                 </div>
             </div>
             <div class="plot-cols col-md-5">
-                <label>Number of covid cases reported per test conducted.</label>
+                <label><b>Does the number of tests has played big role on number of cases?</b></label>
                 <div id="case_scatter_plot" class="case_scatter_plot"></div>
             </div>
             <div class="plot-cols col-md-2">

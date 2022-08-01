@@ -132,7 +132,9 @@ class StackedBarChart {
             .attr("width", function (d) { return vis.x(d[1]) - vis.x(d[0]); })
             .attr("height", vis.y.bandwidth());
 
-        vis.text = vis.g.selectAll("g.vaccine").selectAll("text").data(vis.vaccineData)
+
+        
+        vis.text = vis.g.selectAll("g.vaccine").selectAll("text.data_text").data(vis.vaccineData)
         vis.text.exit().remove()
             .attr("y", function (d) { return vis.y(d.location) + 15; })
             .attr("x", function (d) { return vis.x(d.total_dose) + 5; })
@@ -140,10 +142,12 @@ class StackedBarChart {
 
         vis.text.enter().append("text").merge(vis.text)
             .transition(vis.t)
+            .attr("class","data_text")
             .attr("y", function (d) { return vis.y(d.location) + 15; })
             .attr("x", function (d) { return vis.x(d.total_dose) + 5; })
             .text(d => customTickFormat(d.total_dose))
 
+            
         vis.g.selectAll("g.vaccine").selectAll("rect").on("mouseover", function (d) {
             vis.tooltip.transition().duration(200).style("opacity", .9);
             vis.tooltip.html(

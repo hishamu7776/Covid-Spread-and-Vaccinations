@@ -38,7 +38,10 @@ class PackLayout {
         //Color Scale
         vis.color = d3.scaleOrdinal()
             .domain([-1, 3])            
-            .range(["#ff9da7","#9c755f","#bab0ab"])
+            .range(["#fddab6","#ec6312","#cf4703"])
+
+
+            
 
         //Create pack
         vis.pack = d3.pack().size([vis.WIDTH, vis.HEIGHT]).padding(2);
@@ -87,14 +90,14 @@ class PackLayout {
         vis.view;
 
 
-        vis.circles = vis.svg.append("g").selectAll("circle")
+        vis.circles = vis.svg.selectAll("circle")
             .data(vis.nodes)
             .join("circle")
             .style("fill", function (d) { return vis.color(d.depth); })
             .attr('cx', function (d) { return d.x; })
             .attr('cy', function (d) { return d.y; })
 
-
+        
 
         vis.events = vis.circles.on("mouseover", function (d) {
             vis.tooltip.transition().duration(200).style("opacity", .7);
